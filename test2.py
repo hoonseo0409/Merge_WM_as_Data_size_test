@@ -9,18 +9,19 @@ import copy
 
 numpy.random.seed(7)
 dataset = numpy.loadtxt("pima-indians-diabetes.csv", delimiter=",")
-X_train_10d = dataset[:385, 0:8]
-Y_train_10d = dataset[:385, 8]
+X_train_10d = dataset[:, 0:8]
+Y_train_10d = dataset[:, 8]
 size_10d=X_train_10d.shape[0]
-X_train_1d = dataset[344:385, 0:8]
-Y_train_1d = dataset[344:385, 8]
+X_train_1d = dataset[345:385, 0:8]
+Y_train_1d = dataset[345:385, 8]
 size_1d=X_train_1d.shape[0]
 X_train_9d = dataset[:345, 0:8]
 Y_train_9d = dataset[:345, 8]
 size_9d=X_train_9d.shape[0]
-X_test = dataset[384:, 0:8]
-Y_test = dataset[384:, 8]
-
+#X_test = dataset[384:, 0:8]
+#Y_test = dataset[384:, 8]
+X_test = dataset[:, 0:8]
+Y_test = dataset[:, 8]
 # create model
 model = Sequential()
 model.add(Dense(12, input_dim=8, activation='relu'))
