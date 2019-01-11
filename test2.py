@@ -89,25 +89,26 @@ nine_count = 0.
 total_count = 0.
 intdiv_1d_9d_weights=loaded_model.get_weights()
 for i in range(len(weights_10d)):
+    assert len(weights_10d[i].shape) == 1 or len(weights_10d[i].shape) == 2
     if len(weights_10d[i].shape) == 1:
         for j in range(len(weights_10d[i])):
             myrd = random.uniform(0, 1)
             total_count = total_count + 1
             if myrd <= 0.9:
-                intdiv_1d_9d_weights[i][j] = numpy.copy(weights_9d[i][j])
+                intdiv_1d_9d_weights[i][j] = weights_9d[i][j]
                 nine_count = nine_count + 1
             else:
-                intdiv_1d_9d_weights[i][j] = numpy.copy(weights_1d[i][j])
+                intdiv_1d_9d_weights[i][j] = weights_1d[i][j]
     else:
         for j in range(len(weights_10d[i])):
             for k in range(len(weights_10d[i][j])):
                 myrd = random.uniform(0, 1)
                 total_count = total_count + 1
                 if myrd <= 0.9:
-                    intdiv_1d_9d_weights[i][j][k] = numpy.copy(weights_9d[i][j][k])
+                    intdiv_1d_9d_weights[i][j][k] = weights_9d[i][j][k]
                     nine_count = nine_count + 1
                 else:
-                    intdiv_1d_9d_weights[i][j][k] = numpy.copy(weights_1d[i][j][k])
+                    intdiv_1d_9d_weights[i][j][k] = weights_1d[i][j][k]
     # print(intdiv_1d_9d_weights[i])
     # print(intdiv_1d_9d_weights[i].shape)
     # print(len(intdiv_1d_9d_weights[i].shape))
@@ -133,3 +134,9 @@ loaded_model.load_weights("result/intdiv_1d_9d.h5")
 score = loaded_model.evaluate(X_test, Y_test, verbose=0)
 print("internally divided 9 to 1 result: %s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 print(nine_count/total_count)
+
+for i in range(5):
+    print('---------------------------------------------------------------')
+    print(weights_9d[0][0][i])
+    print(weights_1d[0][0][i])
+    print(intdiv_1d_9d_weights[0][0][i])
