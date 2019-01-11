@@ -6,6 +6,7 @@ import numpy
 from keras.models import model_from_json
 import h5py
 import copy
+import random
 
 numpy.random.seed(7)
 dataset = numpy.loadtxt("pima-indians-diabetes.csv", delimiter=",")
@@ -84,10 +85,20 @@ weights_1d=loaded_model.get_weights()
 score = loaded_model.evaluate(X_test, Y_test, verbose=0)
 print("no learn result: %s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
-
+nine_count = 0.
 intdiv_1d_9d_weights=loaded_model.get_weights()
+print(intdiv_1d_9d_weights[0][1][5])
 for i in range(len(weights_10d)):
-    intdiv_1d_9d_weights[i]=numpy.copy((weights_9d[i]*size_9d+weights_1d[i]*size_1d)/(size_9d+size_1d))
+    for j in range(len(weights_10d[i])):
+        print(len(weights_10d[i][j].shape))
+        for k in range(len(weights_10d[i][j])):
+            myrd = random.uniform(0, 1)
+            if myrd <= 0.9:
+                intdiv_1d_9d_weights[i][j][k] = numpy.copy(weights_9d[i][j][k])
+                nine_count = nine_count + 1
+            else:
+                intdiv_1d_9d_weights[i] = numpy.copy(weights_1d[i][j][k])
+    # intdiv_1d_9d_weights[i]=numpy.copy((weights_9d[i]*size_9d+weights_1d[i]*size_1d)/(size_9d+size_1d))
 loaded_model.set_weights(intdiv_1d_9d_weights)
 loaded_model.save_weights("result/intdiv_1d_9d.h5")
 
@@ -96,3 +107,8 @@ loaded_model.save_weights("result/intdiv_1d_9d.h5")
 loaded_model.load_weights("result/intdiv_1d_9d.h5")
 score = loaded_model.evaluate(X_test, Y_test, verbose=0)
 print("internally divided 9 to 1 result: %s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
+print(nine_count/len(weights_10d))
+print(len(weights_10d))
+print(len(weights_1d))
+print(len(weights_9d))
+print(len(intdiv_1d_9d_weights))
