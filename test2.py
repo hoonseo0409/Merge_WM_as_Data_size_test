@@ -7,6 +7,15 @@ from keras.models import model_from_json
 import h5py
 import copy
 import random
+from math import exp
+
+def sigmoid(x):
+  return 1 / (1 + exp(-x))
+
+def inverse_sigmoid(x):
+    return numpy.log(x/(1-x))
+
+print(inverse_sigmoid(-0.7))
 
 numpy.random.seed(7)
 dataset = numpy.loadtxt("pima-indians-diabetes.csv", delimiter=",")
@@ -25,8 +34,8 @@ X_test = dataset[:, 0:8]
 Y_test = dataset[:, 8]
 # create model
 model = Sequential()
-model.add(Dense(12, input_dim=8, activation='relu'))
-model.add(Dense(8, activation='relu'))
+model.add(Dense(12, input_dim=8, activation='sigmoid'))
+model.add(Dense(8, activation='sigmoid'))
 model.add(Dense(1, activation='sigmoid'))
 model.save_weights("result/init.h5")
 
@@ -92,23 +101,25 @@ for i in range(len(weights_10d)):
     assert len(weights_10d[i].shape) == 1 or len(weights_10d[i].shape) == 2
     if len(weights_10d[i].shape) == 1:
         for j in range(len(weights_10d[i])):
-            myrd = random.uniform(0, 1)
-            total_count = total_count + 1
-            if myrd <= 0.9:
-                intdiv_1d_9d_weights[i][j] = weights_9d[i][j]
-                nine_count = nine_count + 1
-            else:
-                intdiv_1d_9d_weights[i][j] = weights_1d[i][j]
+            intdiv_1d_9d_weights[i][j] = inverse_sigmoid((weights_9d[i][j] * size_9d + weights_1d[i][j] * size_1d) / (size_9d+size_1d))
+            # total_count = total_count + 1
+            # myrd = random.uniform(0, 1)
+            # if myrd <= 0.9:
+            #     intdiv_1d_9d_weights[i][j] = weights_9d[i][j]
+            #     nine_count = nine_count + 1
+            # else:
+            #     intdiv_1d_9d_weights[i][j] = weights_1d[i][j]
     else:
         for j in range(len(weights_10d[i])):
             for k in range(len(weights_10d[i][j])):
-                myrd = random.uniform(0, 1)
-                total_count = total_count + 1
-                if myrd <= 0.9:
-                    intdiv_1d_9d_weights[i][j][k] = weights_9d[i][j][k]
-                    nine_count = nine_count + 1
-                else:
-                    intdiv_1d_9d_weights[i][j][k] = weights_1d[i][j][k]
+                intdiv_1d_9d_weights[i][j][k] = inverse_sigmoid((weights_9d[i][j][k] * size_9d + weights_1d[i][j][k] * size_1d) / (size_9d + size_1d))
+                # total_count = total_count + 1
+                # myrd = random.uniform(0, 1)
+                # if myrd <= 0.9:
+                #     intdiv_1d_9d_weights[i][j][k] = weights_9d[i][j][k]
+                #     nine_count = nine_count + 1
+                # else:
+                #     intdiv_1d_9d_weights[i][j][k] = weights_1d[i][j][k]
     # print(intdiv_1d_9d_weights[i])
     # print(intdiv_1d_9d_weights[i].shape)
     # print(len(intdiv_1d_9d_weights[i].shape))
@@ -133,7 +144,7 @@ loaded_model.save_weights("result/intdiv_1d_9d.h5")
 loaded_model.load_weights("result/intdiv_1d_9d.h5")
 score = loaded_model.evaluate(X_test, Y_test, verbose=0)
 print("internally divided 9 to 1 result: %s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
-print(nine_count/total_count)
+# print(nine_count/total_count)
 
 for i in range(5):
     print('---------------------------------------------------------------')
