@@ -19,19 +19,19 @@ print(inverse_sigmoid(-0.7))
 
 numpy.random.seed(7)
 dataset = numpy.loadtxt("pima-indians-diabetes.csv", delimiter=",")
-X_train_10d = dataset[:, 0:8]
-Y_train_10d = dataset[:, 8]
+X_train_10d = dataset[:345, 0:8]
+Y_train_10d = dataset[:345, 8]
 size_10d=X_train_10d.shape[0]
-X_train_1d = dataset[345:385, 0:8]
-Y_train_1d = dataset[345:385, 8]
+X_train_1d = dataset[310:345, 0:8]
+Y_train_1d = dataset[310:345, 8]
 size_1d=X_train_1d.shape[0]
-X_train_9d = dataset[:345, 0:8]
-Y_train_9d = dataset[:345, 8]
+X_train_9d = dataset[:310, 0:8]
+Y_train_9d = dataset[:310, 8]
 size_9d=X_train_9d.shape[0]
 #X_test = dataset[384:, 0:8]
 #Y_test = dataset[384:, 8]
-X_test = dataset[:, 0:8]
-Y_test = dataset[:, 8]
+X_test = dataset[345:385, 0:8]
+Y_test = dataset[345:385, 8]
 # create model
 model = Sequential()
 model.add(Dense(12, input_dim=8, activation='sigmoid'))
@@ -39,11 +39,13 @@ model.add(Dense(8, activation='sigmoid'))
 model.add(Dense(1, activation='sigmoid'))
 model.save_weights("result/init.h5")
 
-# 10d train
+# compile model
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model_json = model.to_json()
 with open("result/model_10d.json", "w") as json_file:
     json_file.write(model_json)
+
+#10d train
 model.load_weights("result/init.h5")
 model.fit(X_train_10d, Y_train_10d, epochs=150, batch_size=10)
 scores = model.evaluate(X_test, Y_test)
@@ -51,7 +53,6 @@ print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 model.save_weights("result/10d.h5")
 
 # 1d train
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.load_weights("result/init.h5")
 model.fit(X_train_1d, Y_train_1d, epochs=150, batch_size=10)
 scores = model.evaluate(X_test, Y_test)
@@ -59,7 +60,6 @@ print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 model.save_weights("result/1d.h5")
 
 # 9d train
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.load_weights("result/init.h5")
 model.fit(X_train_9d, Y_train_9d, epochs=150, batch_size=10)
 scores = model.evaluate(X_test, Y_test)
@@ -73,6 +73,7 @@ json_file.close()
 loaded_model = model_from_json(loaded_model_json)
 loaded_model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 loaded_model.load_weights("result/1d.h5")
+weights_1d=loaded_model.get_weights()
 score = loaded_model.evaluate(X_test, Y_test, verbose=0)
 print("1d result: %s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
@@ -90,7 +91,6 @@ print("9d result: %s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
 #load no learn
 loaded_model.load_weights("result/init.h5")
-weights_1d=loaded_model.get_weights()
 score = loaded_model.evaluate(X_test, Y_test, verbose=0)
 print("no learn result: %s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
@@ -101,7 +101,7 @@ for i in range(len(weights_10d)):
     assert len(weights_10d[i].shape) == 1 or len(weights_10d[i].shape) == 2
     if len(weights_10d[i].shape) == 1:
         for j in range(len(weights_10d[i])):
-            intdiv_1d_9d_weights[i][j] = inverse_sigmoid((weights_9d[i][j] * size_9d + weights_1d[i][j] * size_1d) / (size_9d+size_1d))
+            intdiv_1d_9d_weights[i][j] = (weights_9d[i][j] * size_9d + weights_1d[i][j] * size_1d) / (size_9d+size_1d)
             # total_count = total_count + 1
             # myrd = random.uniform(0, 1)
             # if myrd <= 0.9:
@@ -112,7 +112,7 @@ for i in range(len(weights_10d)):
     else:
         for j in range(len(weights_10d[i])):
             for k in range(len(weights_10d[i][j])):
-                intdiv_1d_9d_weights[i][j][k] = inverse_sigmoid((weights_9d[i][j][k] * size_9d + weights_1d[i][j][k] * size_1d) / (size_9d + size_1d))
+                intdiv_1d_9d_weights[i][j][k] = (weights_9d[i][j][k] * size_9d + weights_1d[i][j][k] * size_1d) / (size_9d + size_1d)
                 # total_count = total_count + 1
                 # myrd = random.uniform(0, 1)
                 # if myrd <= 0.9:
