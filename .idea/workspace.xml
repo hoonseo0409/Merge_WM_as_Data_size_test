@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6bb47c98-d2f4-42b2-85e9-766afcec7a20" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/semiStochastic_dropOut.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/internal_division.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/internal_division.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/10d.h5" beforeDir="false" afterPath="$PROJECT_DIR$/result/10d.h5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/1d.h5" beforeDir="false" afterPath="$PROJECT_DIR$/result/1d.h5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/9d.h5" beforeDir="false" afterPath="$PROJECT_DIR$/result/9d.h5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/init.h5" beforeDir="false" afterPath="$PROJECT_DIR$/result/init.h5" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/intdiv_1d_9d.h5" beforeDir="false" afterPath="$PROJECT_DIR$/result/intdiv_1d_9d.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/model_10d.json" beforeDir="false" afterPath="$PROJECT_DIR$/result/model_10d.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,8 +22,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="652">
-              <caret line="62" selection-start-line="62" selection-end-line="62" />
+            <state relative-caret-position="647">
+              <caret line="218" column="71" selection-start-line="218" selection-start-column="71" selection-end-line="218" selection-end-column="71" />
               <folding>
                 <element signature="e#33#63#0" expanded="true" />
               </folding>
@@ -254,7 +252,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="1351" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.50104386" />
       <window_info id="Structure" order="1" weight="0.25" />
@@ -294,8 +291,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="652">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
+        <state relative-caret-position="647">
+          <caret line="218" column="71" selection-start-line="218" selection-start-column="71" selection-end-line="218" selection-end-column="71" />
           <folding>
             <element signature="e#33#63#0" expanded="true" />
           </folding>
